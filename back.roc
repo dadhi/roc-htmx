@@ -2,15 +2,12 @@ app [main] { pf: platform "https://github.com/roc-lang/basic-webserver/releases/
 
 import pf.Stdout
 import pf.Task exposing [Task]
-import pf.Http # exposing [Request, Response]
+import pf.Http
 import pf.Utc
 
-# main : Request -> Task Response []
 main = \req ->
 
-    # Log request date, method and url
-    date = Utc.now!
-    dateStr = Utc.toIso8601Str date
-    Stdout.line! "$(dateStr) $(Http.methodToStr req.method) $(req.url)"
+    date = Utc.now! |> Task.map Utc.toIso8601Str
+    Stdout.line! "$(date) $(Http.methodToStr req.method) $(req.url)"
 
     Task.ok { status: 200, headers: [], body: Str.toUtf8 "<b>Hello, world!</b>\n" }
